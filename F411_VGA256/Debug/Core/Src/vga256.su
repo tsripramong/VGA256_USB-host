@@ -1,0 +1,14 @@
+../Core/Src/vga256.c:15:6:ClearScreen	24	static
+../Core/Src/vga256.c:23:6:DrawPixel	16	static
+../Core/Src/vga256.c:33:6:DrawLine	40	static
+../Core/Src/vga256.c:117:6:WriteChar	48	static
+../Core/Src/vga256.c:151:6:WriteString	24	static
+../Core/Src/vga256.c:168:6:SetCursor	16	static
+../Core/Src/vga256.c:180:14:VGA_DegToRad	16	static
+../Core/Src/vga256.c:185:17:VGA_NormalizeTo0_360	24	static
+../Core/Src/vga256.c:199:6:DrawArc	64	static
+../Core/Src/vga256.c:236:6:DrawCircle	40	static
+../Core/Src/vga256.c:280:6:DrawRectangle	32	static
+../Core/Src/vga256.c:288:6:FillRectangle	40	static
+../Core/Src/vga256.c:298:6:FillCircle	48	static
+../Core/Src/vga256.c:329:6:ShowImage	32	static

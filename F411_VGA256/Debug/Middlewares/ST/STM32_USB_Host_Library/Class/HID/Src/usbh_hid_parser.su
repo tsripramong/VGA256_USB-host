@@ -1,0 +1,2 @@
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c:100:10:HID_ReadItem	40	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c:168:10:HID_WriteItem	48	static
