@@ -24,6 +24,8 @@ USB_OTG_FS mode was set to Host_Only without enabling the SOF nor VBUS.
 
 USB_HOST class was set to Human Interface Host Class (HID) and under Platform settings we enabled PA10 as dummy GPIO output then used PA10 for Drive_VBUS_FS. This pin will not be used anywhere in the program, just so STM32CubeIDE will not alarm anything at us.
 
+PB9 and PB10 were set as GPIO_EXTI9 and GPIO_EXTI10 respectively. The code HAL_GPIO_EXTI_Callback() inside main.c contains simple function to increse or decrease VOFFSET which is the offset for the first pixel on the line to be presented on screen. You might remove this setting and leave VOFFSET as the default value or change to anything between 0 and VGA_LBUFFERSIZE-VGA_WIDTH  to move the image horizontally on the screen.
+
 Notes:
 You have to provide additional 5V to USB-C connection. The Blackpill may accept 5V power from USB-C but does not provide 5V output. So you
 have to use a modified cable with additional 5V to the cable so the device can work properly.
