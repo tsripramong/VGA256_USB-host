@@ -155,7 +155,7 @@ for(i=0;i<8;i+=2)
 // setfillstyle(EMPTY_FILL,BLACK);
  //setcolor(BLACK);
  //      bar(2+c*13,2+r*13,2+c*13+13,2+r*13+13);
- FillRectangle(2+c*SIZE,2+r*SIZE,2+c*SIZE+SIZE,2+r*SIZE+SIZE,VGA_BLACK);
+ FillRectangle(2+c*SIZE,2+r*SIZE,2+c*SIZE+SIZE-1,2+r*SIZE+SIZE-1,VGA_BLACK);
  }
 }
 /*
