@@ -261,14 +261,8 @@ int main(void)
   __HAL_DMA_ENABLE_IT(&hdma_tim1_up,DMA_IT_TC);
   __HAL_DMA_ENABLE_IT(&hdma_tim1_up,DMA_IT_HT);
   __HAL_TIM_ENABLE_DMA(&htim1, TIM_DMA_UPDATE);
-//  firstTrig=0;
-
-//  __HAL_TIM_ENABLE_DMA(&htim1, TIM_DMA_UPDATE);
-//  __HAL_TIM_ENABLE(&htim1);
   HAL_TIM_Base_Start(&htim1);
-//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
 
-//  while(1)
   HAL_Delay(100);
   vga_stop=1;
 
@@ -286,8 +280,6 @@ int main(void)
   while (1)
   {
 	  char cc;
-//	  MX_USB_HOST_Process();
-//	  continue;
 	  r = rand()%50;
 	  x = rand()%VGA_WIDTH;
 	  y = rand()%VGA_HEIGHT;
