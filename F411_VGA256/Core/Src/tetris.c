@@ -81,7 +81,7 @@ int Round=0;
 //These functions declared elsewhere in the project
 extern void tetrisDelay(int ms);
 extern uint8_t getch(uint8_t *ch);
-
+extern uint32_t tetrisSeed();
 
 void showScore();
 int  rotateAble(int pieceNum,int pieceTargetRotation,int locX,int locY);
@@ -96,7 +96,7 @@ void tetris(){
 	int x,y;
 	uint8_t ch;
 	//Initial values
-	srand(0);
+	srand(tetrisSeed());
 	fallDelay = NUMLEVEL;
 	curDelay=0;
 	curX = WIDTH/2;

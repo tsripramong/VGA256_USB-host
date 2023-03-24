@@ -185,6 +185,10 @@ extern uint8_t getch(char *ch){
 extern void tetrisDelay(int ms){
 	HAL_Delay(ms);
 }
+
+extern uint32_t tetrisSeed(){
+	return TIM1->CNT+TIM9->CNT+TIM10->CNT;
+}
 /* USER CODE END 0 */
 
 /**
