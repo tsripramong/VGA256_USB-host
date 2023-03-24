@@ -107,7 +107,7 @@ We set USB device to be connected to USB bus as HID. Now a little bit of unneces
 ![](Pictures/usb.png)
 ![](Pictures/usb_vbus.png)
 
-When a new data arrives, HAL will call USBH_HID_EventCallback(), which in this example we firstly detect if the data is from keyboard. Then read the ASCII code from it. Code below gives out an ASCII character when a key is pressed and 0 when a key is depressed. We store the key we read in a circular buffer. Which will be accessed by our custom getch() function.
+When a new data arrives, HAL will call USBH_HID_EventCallback(), which in this example we firstly detect if the data is from keyboard. Then read the ASCII code from it. Code below gives out an ASCII character when a key is pressed and 0 when a key is depressed (and, in this simple example, we discard 0). We then store the key we read in a circular buffer. Which will be accessed by our custom getch() function.
 
 Something to note here. When the main loop takes too long and MX_USB_HOST_Process() is not call frequently enough. USB device may lost the function. So, in this case, I insert a small loop to poll the function for a few times, then read data that USBH_HID_EventCallback() prepared for us. This method may not look like much or pretty enough but it suits the example here just fine.
 ```
