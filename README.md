@@ -4,7 +4,7 @@ A working example for 8-bit color VGA display and USB-HID host for WeAct Black P
 
 ### Key functions:
 - An example to use DMA-to-Peripheral for STM32 to push output patterns (8 bits at once). Here, we send the output via DAC using resistors as R/G/B signals for VGA display.
-- An example to generate H-sync and V-sync for VGA display at 640x480@57Hz
+- An example to generate H-sync and V-sync for VGA display at 640x480@57Hz (Actual resolution 160x120px.)
 - USB-OTG as USB-Host for general USB keyboard. 
 - A simple Tetris game to show an implementation of using GPIO input alongside the VGA display code.
 
