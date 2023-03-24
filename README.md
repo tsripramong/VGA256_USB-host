@@ -34,12 +34,12 @@ Whole frame 525 lines.
 
 ## Important Note
 
-- This example uses DMA memory-to-Peripheral with a very high speed. If you enable NVIC or using DMA for other parts within the code, you might find the screen to flicker or the video frame would move horizontally (out of sync).
+- This example uses DMA memory-to-Peripheral with a very high speed. If you enable NVIC or using DMA for other parts within the code, you might find the screen to flicker or the video frame would move horizontally.
 - If you only use polling for other I/Os or there is not much going on within the program, you could increase the resolution to 320x240. (see the end of this README) 
 - Port PB0-PB7 are set as GPIO output for RGB signals. Keep in mind that we use DMA to write data directly to register address for PB port. So you might find a problem using PB8-PB15 as GPIO output, however, using them as GPIO input or other functions works fine.
-- We send the output signal at 1/4 of VGA output (at 6 MHz instead of 24 MHz). Thus, the actual resolution is down to 100x600px. To keep the aspect ratio, I have to send each line 8 times, so the resolution is actually 100x75px.
+- We send the output signal at 1/4 of VGA output (at 6 MHz instead of 24 MHz). Thus, the actual resolution is down to 160x480px. To keep the aspect ratio, I have to send each line 4 times, so the resolution is actually 160x120px.
 - SYSCLK is set to 96MHz to enable to divided into 48MHz for USB. This causes the pixel frequency for VGA output is out of target at 25.175MHz. Actual frame rate is dropped to around 57Hz, which I found that general VGA display can accept this frequency.
-- USB connector for Black Pill board and its compatible boards are mostly designed to be USB-device only. The board I use has a diode connected in between the USB connector and VCC. Thus, USB can not provide VCC to any device connected to it but can accept power from USB adapter/host. To enable Black Pill to provide power to USB device, I have to modify a cable to tap 5v power to it so USB device connected to it can function properly.
+- USB connector for Black Pill board and its compatible boards are mostly designed to be USB-device only. The board I use has a diode connected in between the USB connector and VCC. Thus, USB can not provide VCC to any device connected to it but can accept power from USB adapter/host. To enable Black Pill to provide power to USB device, I have to modify a cable to tap 5 volt power to it so USB device connected to it can function properly.
 - When enabling USB-host feature, CubeIDE/MX will insert MX_USB_HOST_Process(); at the end of while loop in main() function. This function has to be called frequently so it can recognize USB device and communicate with it. If your code in the main loop take quite a period of time, USB device may not function properly. So you have to call the function additionally within your code path.  
 
 ## Circuit diagram:
