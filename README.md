@@ -99,7 +99,7 @@ Then first thing in the main program, we register two callback functions using H
 
 ## GPIO-host
 
-STM32F411 supports both USB device and USB host. Here, we set the USB port to act as USB host. Since WeAct Black Pill board does not officially support USB host, there is no point enabling VBUS activation line, so we leave it unchecked.  USB speed can be either high or low speed.
+STM32F411 supports both USB device and USB host. Here, we set the USB port to act as USB host. Since WeAct Black Pill board does not officially support USB host, there is no point enabling VBUS activation line, so we leave it unchecked.(USB VBUS is always connected to VCC(5V) via a diode. It accepts power from USB to supply the Black Pill board but prevents it from providing supply to a USB device connected to it.)  USB speed can be either high or low speed.
 
 We set USB device to be connected to USB bus as HID. Now a little bit of unnecessary action, STM32CubeIDE does not expect the use of USB host without enable VBUS (and disable it when unused or over-current detected). Here, I went an easy way using STM32CubeIDE instead of coding everything myself, so I just set a dummy GPIO port as output (PA10, in this example) and I set Drive_VBUS_FS to use this port so I can save the config and be done with it.
 
