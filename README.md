@@ -95,7 +95,7 @@ Our actual resolution is 160x120 which is 1/4th of the screen resolution at 640x
 
 We enable TIM1_UP DMA channel (DMA2 stream 5) for transferring display data from memory to GPIO (peripheral). Set it as circular mode and data width is byte size. 
 
-Then first thing in the main program, we register two callback functions using HAL_DMA_RegisterCallback() so it will be called when DMA transfers data half way, and when it completes the transfer before going back to resend from the start. (in circular fasion)  
+Then first thing in the main program, we register two callback functions using HAL_DMA_RegisterCallback() so they will be called when DMA transfers data half way, and when it completes the transfer before going back to resend from the start. (in circular fasion)  
 
 ## GPIO-host
 
