@@ -1,6 +1,6 @@
 # 8-bit color VGA display for STM32F411CEU6 (Black Pill) with USB-host for keyboard
 
-A working example for 1-bit(monochrome) VGA display for WeAct Blue Pill board using (mainly)HAL API.
+A working example for 8-bit color VGA display and USB-HID host for WeAct Black Pill board using (mainly)HAL API.
 
 ### Key functions:
 - An example to use DMA-to-Peripheral for STM32 to push output patterns (8 bits at once). Here, we send the output via DAC using resistors as R/G/B signals for VGA display.
