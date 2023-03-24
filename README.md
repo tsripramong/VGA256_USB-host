@@ -4,7 +4,7 @@ A working example for 8-bit color VGA display and USB-HID host for WeAct Black P
 
 ### Key functions:
 - An example to use DMA-to-Peripheral for STM32 to push output patterns (8 bits at once). Here, we send the output via DAC using resistors as R/G/B signals for VGA display.
-- An example to generate H-sync and V-sync for VGA display at 640x480@57Hz
+- An example to generate H-sync and V-sync for VGA display at 640x480@57Hz (Actual resolution 160x120px.)
 - USB-OTG as USB-Host for general USB keyboard. 
 - A simple Tetris game to show an implementation of using GPIO input alongside the VGA display code.
 
@@ -36,9 +36,9 @@ Whole frame 525 lines.
 
 - This example uses DMA memory-to-Peripheral with a very high speed. If you enable NVIC or using DMA for other parts within the code, you might find the screen to flicker or the video frame would move horizontally.
 - If you only use polling for other I/Os or there is not much going on within the program, you could increase the resolution to 320x240. (see the end of this README) 
-- Port PB0-PB7 are set as GPIO output for RGB signals. Keep in mind that we use DMA to write data directly to register address for PB port. So you might find a problem using PB8-PB15 as GPIO output, however, using them as GPIO input or other functions works fine.
+- Port PB0-PB7 are set as GPIO outputs for RGB signals. Keep in mind that we use DMA to write data directly to register address for PB port. So you might find a problem using PB8-PB15 as GPIO output, however, using them as GPIO input or other functions works fine.
 - We send the output signal at 1/4th of VGA output (at 6 MHz instead of 24 MHz). Thus, the actual resolution is down to 160x480px. To keep the aspect ratio, I have to send each line 4 times, so the resolution is actually 160x120px.
-- SYSCLK is set to 96MHz to enable to be divided into 48MHz for USB. This causes the pixel frequency for VGA output is out of target at 25.175MHz. Actual frame rate is dropped to around 57Hz, which I found that general VGA display can accept this frequency.
+- PLL generates clock sources for SYSCLK at 96MHz and 48MHz for USB. Clock sources for all Timers is 96MHz, so the pixel frequency for VGA output is set to 24 MHz instead of 25.175MHz. Actual frame rate is therefore dropped to around 57Hz, which I found that VGA monitors can still accept this frequency.
 - USB connector for Black Pill board and its compatible boards are mostly designed to be USB-device only. The board I use has a diode connected in between the USB connector and VCC. Thus, USB can not provide VCC to any device connected to it but can accept power from USB adapter/host. To enable Black Pill to provide power to USB device, I have to modify a cable to tap 5 volt power to it so USB device connected to it can function properly.
 - When enabling USB-host feature, CubeIDE/MX will insert MX_USB_HOST_Process(); at the end of while loop in main() function. This function has to be called frequently so it can recognize USB device and communicate with it. If your code in the main loop take quite a period of time, USB device may not function properly. So you have to call the function additionally within your code path.  
 
@@ -95,21 +95,21 @@ Our actual resolution is 160x120 which is 1/4th of the screen resolution at 640x
 
 We enable TIM1_UP DMA channel (DMA2 stream 5) for transferring display data from memory to GPIO (peripheral). Set it as circular mode and data width is byte size. 
 
-Then first thing in the main program, we register two callback functions using HAL_DMA_RegisterCallback() so it will be called when DMA transfers data half way, and when it completes the transfer before going back to resend from the start. (in circular fasion)  
+Then first thing in the main program, we register two callback functions using HAL_DMA_RegisterCallback() so they will be called when DMA transfers data half way, and when it completes the transfer before going back to resend from the start. (in circular fasion)  
 
 ## GPIO-host
 
-STM32F411 support both USB device and USB host. Here, we set the USB port to act as USB host. Since WeAct Black Pill board does not officially support USB host, there is no point enabling VBUS activate line to be uses, so we leave it unchecked.  USB speed can be high or low speed.
+STM32F411 supports both USB device and USB host. Here, we set the USB port to act as USB host. Since WeAct Black Pill board does not officially support USB host, there is no point enabling VBUS activation line, so we leave it unchecked.(USB VBUS is always connected to VCC(5V) via a diode. It accepts power from USB to supply the Black Pill board but prevents it from providing supply to a USB device connected to it.)  USB speed can be either high or low speed.
 
-We set USB device to be connected to USB bus as HID. Now a little bit of unnecessary action, STM32CubeIDE does not expect the use of USB host without enable VBUS (and disable it when unused or over-current detected). Here, I went an easy way using STM32CubeIDE instead of coding everything myself, so I just set a GPIO port (PA10, in this example) and I set the Drive_VBUS_FS to use this port so the HAL code will not throw error at me.
+We set USB device to be connected to USB bus as HID. Now a little bit of unnecessary action, STM32CubeIDE does not expect the use of USB host without VBUS control logic (and disable it when unused or over-current detected). Here, I went an easy way using STM32CubeIDE instead of coding everything myself, so I just set a dummy GPIO port as output (PA10, in this example) and I set Drive_VBUS_FS to use this port so I can save the config and be done with it.
 
 ![](Pictures/usb_otg.png)
 ![](Pictures/usb.png)
 ![](Pictures/usb_vbus.png)
 
-When a new data arrives, HAL will call USBH_HID_EventCallback(), which in this example we first detect if the data is from keyboard. Then read the ASCII code from it. Code below give ASCII code when a key is pressed and 0 when a key is depressed. We store the key we read in a circular buffer. Which will be accessed by our custom getch() function.
+When a new data arrives, HAL will call USBH_HID_EventCallback(), which in this example we firstly detect if the data is from keyboard. Then read the ASCII code from it. Code below gives out an ASCII character when a key is pressed and 0 when a key is depressed (and, in this simple example, we discard 0). We then store the key we read in a circular buffer. Which will be accessed by our custom getch() function.
 
-Something to note here. When the main loop takes too long and MX_USB_HOST_Process() is not call frequently enough. USB device may lost the function. So, in this case, I insert a small loop to poll the function for a few times, then read data that USBH_HID_EventCallback() prepared for us. This method may not look like much or pretty enough but it suits the example here just fine.
+Something to note here. When the main loop takes too long and MX_USB_HOST_Process() is not call frequently enough. USB device may no longer work. So, in this case, I insert a small loop to poll the function for a few times, then read data that USBH_HID_EventCallback() prepared for us. This method may not look like much or pretty enough but it suits the example here just fine.
 ```
 int kBin=0;
 int kBout=0;
@@ -149,10 +149,10 @@ To show an implementation of both VGA display and USB host function. I wrote a s
 
 The example here was first designed for 320x240. However, when I added USB-host function to the program it caused the display screen to shift horizontally when pressing key numerous times. This probably was the result of DMA cannot send out data to GPIO in time  because STM32 had to manage the USB at the same time. So I have to reduce the resolution by half and the problem was gone.
 
-If you plan to use VGA display functionality with a simple program without using NIVC or other DMA, you may change do the following:
+If you plan to use VGA display functionality with a simple program without using NIVC or other DMA, you could change program code and config using the following:
 
-- the Counter Period of TIM1 to 2-1 (1) 
-- change a number of definition in vga256.h as
+- Change the Counter Period of TIM1 to 2-1 (1) 
+- Change a number of definitions in vga256.h as
 ```
 #define VGA_WIDTH  318		
 #define VGA_HEIGHT  238		
@@ -167,7 +167,7 @@ If you plan to use VGA display functionality with a simple program without using
 
 VGA_WIDTH/VGA_HEIGHT is the frame size. Here it should be 320 and 240 respectively, but the values cause the frame to over-scan and might cause the frame to shake due to the actual frequency is a little bit off. So I reduced the area to this value instead. (You can try out the value though.)
 
-- change the definition of pointers for the starting location in memory for each line. We only write each line twice, instead of four times in the example. Here, we require 4 starting location. Two for each half of DMA memory. 
+- Change the definition of pointers for the starting location in memory for each line. We only write each line twice, instead of four times in the example. Here, we require 4 starting location. Two for each half of DMA memory. 
 
 ```
 uint16_t vga_voff[4];
@@ -182,7 +182,7 @@ void VGA_update(){
 
 ```
 
-- and Both callback function we use them to write each half of DMA memory will be like:
+- And Both callback function we use them to write each half of DMA memory will be like:
 
 ```
 static void DMA_HalfCpltCallback(DMA_HandleTypeDef *hdma){
