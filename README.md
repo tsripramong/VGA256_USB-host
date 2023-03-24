@@ -101,7 +101,7 @@ Then first thing in the main program, we register two callback functions using H
 
 STM32F411 supports both USB device and USB host. Here, we set the USB port to act as USB host. Since WeAct Black Pill board does not officially support USB host, there is no point enabling VBUS activation line, so we leave it unchecked.  USB speed can be either high or low speed.
 
-We set USB device to be connected to USB bus as HID. Now a little bit of unnecessary action, STM32CubeIDE does not expect the use of USB host without enable VBUS (and disable it when unused or over-current detected). Here, I went an easy way using STM32CubeIDE instead of coding everything myself, so I just set a GPIO port (PA10, in this example) and I set the Drive_VBUS_FS to use this port so the HAL code will not throw error at me.
+We set USB device to be connected to USB bus as HID. Now a little bit of unnecessary action, STM32CubeIDE does not expect the use of USB host without enable VBUS (and disable it when unused or over-current detected). Here, I went an easy way using STM32CubeIDE instead of coding everything myself, so I just set a dummy GPIO port as output (PA10, in this example) and I set Drive_VBUS_FS to use this port so I can save the config and be done with it.
 
 ![](Pictures/usb_otg.png)
 ![](Pictures/usb.png)
