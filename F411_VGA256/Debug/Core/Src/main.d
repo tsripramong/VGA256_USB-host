@@ -40,8 +40,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_mouse.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
- ../Core/Inc/vga256.h ../Core/Inc/vgafonts.h ../Core/Inc/flower.h \
- ../Core/Inc/color.h ../Core/Inc/rgb.h
+ ../Core/Inc/vga256.h ../Core/Inc/vgafonts.h ../Core/Inc/flower160.h \
+ ../Core/Inc/color160.h ../Core/Inc/rgb160.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -86,6 +86,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
 ../Core/Inc/vga256.h:
 ../Core/Inc/vgafonts.h:
-../Core/Inc/flower.h:
-../Core/Inc/color.h:
-../Core/Inc/rgb.h:
+../Core/Inc/flower160.h:
+../Core/Inc/color160.h:
+../Core/Inc/rgb160.h:

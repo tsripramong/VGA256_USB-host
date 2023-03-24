@@ -27,9 +27,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "vga256.h"
-#include "flower.h"
-#include "color.h"
-#include "rgb.h"
+#include "flower160.h"
+#include "color160.h"
+#include "rgb160.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,10 +58,7 @@ uint16_t vga_stop=0;
 int16_t line=0;
 uint16_t firstTrig=1;
 
-uint16_t vga_voff11=0;		//offset for 1st line
-uint16_t vga_voff12=VGA_LBUFFERSIZE;
-uint16_t vga_voff21=VGA_LBUFFERSIZE+VGA_LBUFFERSIZE;
-uint16_t vga_voff22=VGA_LBUFFERSIZE+VGA_LBUFFERSIZE+VGA_LBUFFERSIZE;
+uint16_t vga_voff[8];
 uint32_t GPIOB_ODR;
 
 char kBuffer[16];
@@ -87,10 +84,9 @@ extern void tetris();
 /* USER CODE BEGIN 0 */
 
 void VGA_update(){
-	   vga_voff11=VOFFSET;		//offset for 1st line
-	   vga_voff12=VOFFSET+VGA_LBUFFERSIZE;
-	   vga_voff21=VOFFSET+VGA_LBUFFERSIZE+VGA_LBUFFERSIZE;
-	   vga_voff22=VOFFSET+VGA_LBUFFERSIZE+VGA_LBUFFERSIZE+VGA_LBUFFERSIZE;
+	vga_voff[0] = VOFFSET;
+	for(int i=1;i<8;i++)
+	   vga_voff[i]=vga_voff[i-1]+VGA_LBUFFERSIZE;
 }
 
 void HAL_GPIO_EXTI_Callback (uint16_t GPIO_Pin){
@@ -133,8 +129,8 @@ static void DMA_HalfCpltCallback(DMA_HandleTypeDef *hdma){
 	if((line<0)||(line>=VGA_VBUFFER)){
 		memset((uint8_t *)VGA_obuffer,0,VGA_FULL);
 	}else{
-	memcpy((uint8_t *)VGA_obuffer + vga_voff11,VGA_buffer[line],VGA_LBUFFER);
-	memcpy((uint8_t *)VGA_obuffer + vga_voff12,VGA_buffer[line],VGA_LBUFFER);
+		for(int i=0;i<4;i++)
+			memcpy((uint8_t *)VGA_obuffer + vga_voff[i],VGA_buffer[line],VGA_LBUFFER);
 	}
 	line++;
 	if(vga_stop){
@@ -142,10 +138,6 @@ static void DMA_HalfCpltCallback(DMA_HandleTypeDef *hdma){
 		firstTrig=1;
 		vga_stop=0;
 		VGA_update();
-	}
-	if(line>=VGA_VBUFFER && !firstTrig){
-		HAL_DMA_Abort_IT(&hdma_tim1_up);
-		firstTrig=1;
 	}
 }
 
@@ -154,8 +146,8 @@ static void DMA_CpltCallback(DMA_HandleTypeDef *hdma){
 	if((line<0)||(line>=VGA_VBUFFER)){
 		memset((uint8_t *)VGA_obuffer,0,VGA_FULL);
 	}else{
-	memcpy((uint8_t *)VGA_obuffer + vga_voff21,VGA_buffer[line],VGA_LBUFFER);
-	memcpy((uint8_t *)VGA_obuffer + vga_voff22,VGA_buffer[line],VGA_LBUFFER);
+		for(int i=4;i<8;i++)
+			memcpy((uint8_t *)VGA_obuffer + vga_voff[i],VGA_buffer[line],VGA_LBUFFER);
 	}
 	line++;
 	if(vga_stop){
@@ -163,10 +155,6 @@ static void DMA_CpltCallback(DMA_HandleTypeDef *hdma){
 		firstTrig=1;
 		vga_stop=0;
 		VGA_update();
-	}
-	if(line>=VGA_VBUFFER && !firstTrig){
-		HAL_DMA_Abort_IT(&hdma_tim1_up);
-		firstTrig=1;
 	}
 }
 
@@ -194,7 +182,7 @@ extern uint8_t getch(char *ch){
 	return 1;
 }
 
-extern void myDelay(int ms){
+extern void tetrisDelay(int ms){
 	HAL_Delay(ms);
 }
 /* USER CODE END 0 */
@@ -250,6 +238,7 @@ int main(void)
   		  HAL_Delay(250);
   	  }
   }
+  VGA_update();
   GPIOB_ODR = (uint32_t)&(GPIOB->ODR);
   HAL_TIM_Base_Start_IT(&htim9);
   HAL_TIM_PWM_Start(&htim9,TIM_CHANNEL_1);
@@ -261,6 +250,7 @@ int main(void)
   __HAL_DMA_ENABLE_IT(&hdma_tim1_up,DMA_IT_TC);
   __HAL_DMA_ENABLE_IT(&hdma_tim1_up,DMA_IT_HT);
   __HAL_TIM_ENABLE_DMA(&htim1, TIM_DMA_UPDATE);
+
   HAL_TIM_Base_Start(&htim1);
 
   HAL_Delay(100);
@@ -280,6 +270,8 @@ int main(void)
   while (1)
   {
 	  char cc;
+//	  MX_USB_HOST_Process();
+//	  continue;
 	  r = rand()%50;
 	  x = rand()%VGA_WIDTH;
 	  y = rand()%VGA_HEIGHT;
@@ -313,11 +305,11 @@ int main(void)
 	  if(z>=100){
 		  /////////
 		  ClearScreen(VGA_BLACK);
-		  ShowImage((uint8_t *)color,320,240,0,0);
+		  ShowImage((uint8_t *)color,160,120,0,0);
 		  HAL_Delay(5000);
-		  ShowImage((uint8_t *)image,360,228,0,0);
+		  ShowImage((uint8_t *)flower,160,101,0,0);
 		  HAL_Delay(5000);
-		  ShowImage((uint8_t *)rgb,320,240,0,0);
+		  ShowImage((uint8_t *)rgb,160,120,0,0);
 		  HAL_Delay(5000);
 
 		  tetris();
@@ -407,7 +399,7 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 1;
+  htim1.Init.Prescaler = 4-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim1.Init.Period = 4-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -455,7 +447,7 @@ static void MX_TIM9_Init(void)
   htim9.Instance = TIM9;
   htim9.Init.Prescaler = 0;
   htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 523;
+  htim9.Init.Period = 525-2;
   htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim9) != HAL_OK)
@@ -473,7 +465,7 @@ static void MX_TIM9_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 2-1;
+  sConfigOC.Pulse = 2;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim9, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)

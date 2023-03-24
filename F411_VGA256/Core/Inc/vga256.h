@@ -10,12 +10,13 @@
 #ifndef INC_VGA256_H_
 #define INC_VGA256_H_
 
-#define VGA_WIDTH  318		//Displayable area (Width)
-#define VGA_HEIGHT  232		//Displayable area (Height)
-#define VGA_LBUFFER 320		//Local Video RAM buffer (Width)
-#define VGA_VBUFFER 238		//Local Video RAM buffer (Height)
+#define VGA_WIDTH   160		//Displayable area (Width)
+#define VGA_HEIGHT  116		//Displayable area (Height)
 
-#define VGA_LBUFFERSIZE 400	//Circular DMA RAM bufer (1-line)
+#define VGA_LBUFFER 160		//Local Video RAM buffer (Width)
+#define VGA_VBUFFER 120		//Local Video RAM buffer (Height)
+
+#define VGA_LBUFFERSIZE 200	//Circular DMA RAM bufer (1-line)
 #define VGA_FULL	1600
 #define VGA_HALF	800
 
@@ -26,6 +27,7 @@
 #define VGA_BLUE	0x03
 #define VGA_GRAY	0x49
 #define VGA_YELLOW	0xfc
+#define VGA_ORANGE	0xec
 #define VGA_CYAN	0x1f
 #define VGA_PURPLE  0xe3
 #define VGA_COLOR uint8_t
