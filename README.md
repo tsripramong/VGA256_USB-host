@@ -149,7 +149,7 @@ To show an implementation of both VGA display and USB host function. I wrote a s
 
 The example here was first designed for 320x240. However, when I added USB-host function to the program it caused the display screen to shift horizontally when pressing key numerous times. This probably was the result of DMA cannot send out data to GPIO in time  because STM32 had to manage the USB at the same time. So I have to reduce the resolution by half and the problem was gone.
 
-If you plan to use VGA display functionality with a simple program without using NIVC or other DMA, you may change do the following:
+If you plan to use VGA display functionality with a simple program without using NIVC or other DMA, you could change program code and config using the following:
 
 - the Counter Period of TIM1 to 2-1 (1) 
 - change a number of definition in vga256.h as
