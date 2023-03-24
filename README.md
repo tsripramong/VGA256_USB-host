@@ -151,8 +151,8 @@ The example here was first designed for 320x240. However, when I added USB-host 
 
 If you plan to use VGA display functionality with a simple program without using NIVC or other DMA, you could change program code and config using the following:
 
-- the Counter Period of TIM1 to 2-1 (1) 
-- change a number of definition in vga256.h as
+- Change the Counter Period of TIM1 to 2-1 (1) 
+- Change a number of definitions in vga256.h as
 ```
 #define VGA_WIDTH  318		
 #define VGA_HEIGHT  238		
@@ -167,7 +167,7 @@ If you plan to use VGA display functionality with a simple program without using
 
 VGA_WIDTH/VGA_HEIGHT is the frame size. Here it should be 320 and 240 respectively, but the values cause the frame to over-scan and might cause the frame to shake due to the actual frequency is a little bit off. So I reduced the area to this value instead. (You can try out the value though.)
 
-- change the definition of pointers for the starting location in memory for each line. We only write each line twice, instead of four times in the example. Here, we require 4 starting location. Two for each half of DMA memory. 
+- Change the definition of pointers for the starting location in memory for each line. We only write each line twice, instead of four times in the example. Here, we require 4 starting location. Two for each half of DMA memory. 
 
 ```
 uint16_t vga_voff[4];
@@ -182,7 +182,7 @@ void VGA_update(){
 
 ```
 
-- and Both callback function we use them to write each half of DMA memory will be like:
+- And Both callback function we use them to write each half of DMA memory will be like:
 
 ```
 static void DMA_HalfCpltCallback(DMA_HandleTypeDef *hdma){
