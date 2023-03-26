@@ -57,7 +57,7 @@ Image signals come from PB0-PB8. (PB0-blue0, PB1-blue1, PB2-green0, PB3-green1, 
 
 Trimpots (R9,R10/R11) can be anything from 500ohms and up. You can adjust the values for color brightness to achieve a correct white-balance. 
 
-PB10/PB11 were assigned as EXTI with pull-up resistor enabled. We use these pins to adjust horizontal positioning. You can omit these pins and remove function HAL_GPIO_EXTI_Callback() in main.c and set VOFFSET to any value from 0 to 39 by yourself. 
+PB10/PB11 were assigned as EXTI with pull-up resistor enabled. We connect them to switches that are connected to the ground so we can adjust horizontal positioning. You can omit these pins and remove function HAL_GPIO_EXTI_Callback() in main.c and set VOFFSET to any value from 0 to 39 by yourself. 
 
 Enable Pin 9 and Pin 10 interrupt for VOFFSET adjustment above (EXTI line[9:5] and EXTI line[15:10]). Also TIM9 global interrupt for triggering the start of DMA transfer.
 
