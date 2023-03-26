@@ -97,7 +97,7 @@ We enable TIM1_UP DMA channel (DMA2 stream 5) for transferring display data from
 
 Then first thing in the main program, we register two callback functions using HAL_DMA_RegisterCallback() so they will be called when DMA transfers data half way, and when it completes the transfer before going back to resend from the start. (in circular fasion)  
 
-## GPIO-host
+## USB-host
 
 STM32F411 supports both USB device and USB host. Here, we set the USB port to act as USB host. Since WeAct Black Pill board does not officially support USB host, there is no point enabling VBUS activation line, so we leave it unchecked.(USB VBUS is always connected to VCC(5V) via a diode. It accepts power from USB to supply the Black Pill board but prevents it from providing supply to a USB device connected to it.)  USB speed can be either high or low speed.
 
