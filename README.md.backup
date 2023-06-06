@@ -39,12 +39,12 @@ Whole frame 525 lines.
 - Port PB0-PB7 are set as GPIO outputs for RGB signals. Keep in mind that we use DMA to write data directly to register address for PB port. So you might find a problem using PB8-PB15 as GPIO output, however, using them as GPIO input or other functions works fine.
 - We send the output signal at 1/4th of VGA output (at 6 MHz instead of 24 MHz). Thus, the actual resolution is down to 160x480px. To keep the aspect ratio, I have to send each line 4 times, so the resolution is actually 160x120px.
 - PLL generates clock sources for SYSCLK at 96MHz and 48MHz for USB. Clock sources for all Timers is 96MHz, so the pixel frequency for VGA output is set to 24 MHz instead of 25.175MHz. Actual frame rate is therefore dropped to around 57Hz, which I found that VGA monitors can still accept this frequency.
-- USB connector for Black Pill board and its compatible boards are mostly designed to be USB-device only. The board I use has a diode connected between the USB connector and VCC. Thus, USB can not provide VCC to any device connected to it but can accept power from USB adapter/host. To provide power to USB device, I have to modify a cable to supply external 5 volt power to it so USB device connected to it can function properly.
+- USB connector for Black Pill board and its compatible boards are mostly designed to be USB-device only. The board I use has a diode connected between the USB connector and VCC. Thus, USB can not provide VCC to any device connected to it but can accept power from USB adapter/host. To provide power to USB device, I have to modify a cable to supply external 5 volt power so USB device can function properly.
 - When enabling USB-host feature, CubeIDE/MX will insert MX_USB_HOST_Process(); at the end of while loop in main() function. This function has to be called frequently so it can recognize USB device and communicate with it. If your code in the main loop take quite a period of time, USB device may not function properly. So you have to call the function additionally within your code path.  
 
 ## Circuit diagram:
 
-We use STM32F411CEU6 (WeAct Black pill) in this project. If you use other board with STM32F411 from other board maker, you might find that some pin might not expose to be used outside. In that case you will have to reassign all the ports, I hope this project would be a starting point for you to implement yourself. 
+We use STM32F411CEU6 (WeAct Black pill) in this project. If you use other board with STM32F411 from other board makers, the borad deyou might find that some pins might not expose to be used outside. In that case you will have to reassign all the ports, I hope this project would be a starting point for you to implement yourself. 
 
 TIM10 is assigned to generate H-sync. PWM channel 1 (PB8) provides H-sync signal, while TIM9 is for V-sync using PWM channel 1 (PA2) for V-sync signal.
 

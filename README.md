@@ -44,7 +44,7 @@ Whole frame 525 lines.
 
 ## Circuit diagram:
 
-We use STM32F411CEU6 (WeAct Black pill) in this project. If you use other board with STM32F411 from other board maker, you might find that some pin might not expose to be used outside. In that case you will have to reassign all the ports, I hope this project would be a starting point for you to implement yourself. 
+We use STM32F411CEU6 (WeAct Black pill) in this project. If you use other board with STM32F411 from other board makers, the board design may be different, however, I hope this project would be a starting point for you to implement by yourself. 
 
 TIM10 is assigned to generate H-sync. PWM channel 1 (PB8) provides H-sync signal, while TIM9 is for V-sync using PWM channel 1 (PA2) for V-sync signal.
 
