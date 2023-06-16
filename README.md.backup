@@ -34,7 +34,7 @@ Whole frame 525 lines.
 
 ## Important Note
 
-- This example uses DMA memory-to-Peripheral (GPIO) with a very high speed. If you enable NVIC or using DMA for other parts within the code, you might find the screen to flicker or the video frame would move horizontally.
+- This example uses DMA memory-to-Peripheral (GPIO) with a very high speed. If you enable NVIC or using DMA for other parts within the code, you might find the screen flickering or the video frame would sometime move horizontally (as the DMA can not keep up with sending byte stream to GPIO in time).
 - If you only use polling for other I/Os or there is not much going on within the program, you could increase the resolution to 320x240. (see the end of this README) 
 - Port PB0-PB7 are set as GPIO outputs for RGB signals. Keep in mind that we use DMA to write data directly to register address for PB port. So you might find a problem using PB8-PB15 as GPIO output, however, using them as GPIO input or other functions works fine.
 - We send the output signal at 1/4th of VGA output (at 6 MHz instead of 24 MHz). Thus, the actual resolution is down to 160x480px. To keep the aspect ratio, I have to send each line 4 times, so the resolution is actually 160x120px.
