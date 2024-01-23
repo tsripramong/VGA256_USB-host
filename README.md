@@ -51,7 +51,7 @@ TIM10 is assigned to generate H-sync. PWM channel 1 (PB8) provides H-sync signal
 Image signals come from PB0-PB8. (PB0-blue0, PB1-blue1, PB2-green0, PB3-green1, PB4-green2, PB5-red0, PB6-red1, PB7-red2) If, however, in any circumstances you have to reassign some of these pins you have to relocate them to be in the same block (0-7 or 8-15,  any port will do) then you have to substitute my example code with the new address which can be referred using ODR, for example
 
 ```
-(uint32_t)&GPIOB->ODR   //accessing bit0-7 of GPIOB (or bit0-7 as in this project)  
+(uint32_t)&GPIOB->ODR   //accessing bit0-15 of GPIOB (or bit0-7 as in this project)  
 ((uint32_t)&GPIOB->ODR)+1  //accessing bit8-15 of GPIOB
 ```
 
