@@ -111,6 +111,7 @@ When a new data arrives, HAL will call USBH_HID_EventCallback(), which, in this 
 
 Something to note here. When the main loop takes too long and MX_USB_HOST_Process() is not call frequently enough. USB device may no longer work. So, in this case, I insert a small loop to poll the function for a few times, then read data that USBH_HID_EventCallback() prepared for us. This method may not look like much or pretty enough but it suits the example here just fine.
 ```
+char kBuffer[16];
 int kBin=0;
 int kBout=0;
 ...
